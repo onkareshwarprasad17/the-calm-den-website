@@ -5,11 +5,15 @@ import logo from "@/public/logo.png";
 function Logo() {
   return (
     <Link href="/" className="flex items-center gap-4 z-10">
-      <img
-        src="/logo.png"
+      {/* Specifying the image this way needs us to set the height & width */}
+
+      {/* <Image src="/logo.png" height="50" width="50" alt="The Calm Den logo" /> */}
+
+      <Image
+        src={logo}
         height="50"
-        // quality={100}
         width="50"
+        quality={100}
         alt="The Calm Den logo"
       />
       <span className="text-xl font-semibold text-primary-100">
