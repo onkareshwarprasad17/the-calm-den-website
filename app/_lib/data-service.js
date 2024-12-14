@@ -40,7 +40,8 @@ export async function getCabinPrice(id) {
 export const getCabins = async function () {
   const { data, error } = await supabase
     .from('cabins')
-    .select('id, name, maxCapacity, regularPrice, discount, image');
+    .select('id, name, maxCapacity, regularPrice, discount, image')
+    .order('name');
 
   if (error) {
     console.error(error);
