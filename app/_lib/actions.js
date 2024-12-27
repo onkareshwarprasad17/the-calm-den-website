@@ -1,7 +1,14 @@
 'use server';
 
 import { auth, signIn, signOut } from '@/app/_lib/auth';
-import { updateGuestData } from './data-service';
+import {
+  deleteBooking,
+  getBookings,
+  updateBooking,
+  updateGuestData,
+} from './data-service';
+import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 /* these server actions can be used in the form action attribute 
    to perform the action needed when the form is submitted */
@@ -36,4 +43,43 @@ export async function updateGuest(formData) {
   };
 
   await updateGuestData(session.user.guestId, updatedData);
+}
+
+export async function deleteReservation(bookingId) {
+  const session = await auth();
+  if (!session) throw new Error('You must be logged in');
+
+  // need to check if the bookingId is really related to the user who is attempting to delete the reservation
+  const guestBookings = await getBookings(session.user.guestId);
+  const guestBookingIds = guestBookings.map((booking) => booking.id);
+
+  if (!guestBookingIds.includes(bookingId))
+    throw new Error('You are not allowed to delete this booking');
+
+  await deleteBooking(bookingId);
+}
+
+export async function updateReservation(formData, bookingId) {
+  const session = await auth();
+  if (!session) throw new Error('You must be logged in');
+
+  const numGuests = formData.get('numGuests');
+  const observations = formData.get('observations').slice(0, 1000);
+  const updatedData = {
+    numGuests,
+    observations,
+  };
+
+  // get the bookings of the current user
+  const guestBookings = await getBookings(session.user.guestId);
+  // check if the current bookingId is in the current users data
+  const guestBookingIds = guestBookings.map((booking) => booking.id);
+
+  if (!guestBookingIds.includes(Number(bookingId)))
+    throw new Error('You are not allowed to update this booking');
+
+  await updateBooking(bookingId, updatedData);
+
+  revalidatePath(`/account/reservations/edit/${bookingId}`);
+  redirect('/account/reservations');
 }

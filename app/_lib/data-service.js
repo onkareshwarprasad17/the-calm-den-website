@@ -94,6 +94,7 @@ export async function getBookings(guestId) {
     throw new Error('Bookings could not get loaded');
   }
 
+  revalidatePath('account/reservations');
   return data;
 }
 
