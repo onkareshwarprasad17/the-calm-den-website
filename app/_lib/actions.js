@@ -2,6 +2,7 @@
 
 import { auth, signIn, signOut } from '@/app/_lib/auth';
 import {
+  createBooking,
   deleteBooking,
   getBookings,
   updateBooking,
@@ -82,4 +83,29 @@ export async function updateReservation(formData, bookingId) {
 
   revalidatePath(`/account/reservations/edit/${bookingId}`);
   redirect('/account/reservations');
+}
+
+export async function createNewBooking(bookingData, formData) {
+  const session = await auth();
+  if (!session) throw new Error('You must be logged in');
+
+  const numGuests = formData.get('numGuests');
+  const observations = formData.get('observations').slice(0, 1000);
+  const newBooking = {
+    ...bookingData,
+    guestId: session.user.guestId,
+    numGuests,
+    observations,
+    isPaid: false,
+    hasBreakfast: false,
+    extrasPrice: 0,
+    totalPrice: bookingData.cabinPrice,
+    status: 'unconfirmed',
+  };
+
+  await createBooking(newBooking);
+
+  revalidatePath(`/cabins/${bookingData.cabinId}`);
+
+  redirect('/cabins/thankyou');
 }
