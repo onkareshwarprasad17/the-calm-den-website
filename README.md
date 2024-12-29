@@ -22,7 +22,7 @@ The Calm Den Website is a  Next.js based customer facing platform for <a target=
 ## Table of contents
 
 - [Key Features](#key-features)
-- [My Journey with TheCalmDen](#my-process)
+- [My Journey with TheCalmDen](#my-journey-with-thecalmden)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
   - [Continued development](#continued-development)
@@ -82,3 +82,7 @@ I plan to delve deeper into advanced Next.js and React concepts and explore tech
 - Frontend Mentor - [@onkareshwarprasad17](https://www.frontendmentor.io/profile/onkareshwarprasad17)
 
 Please feel free to reach out with any question or feedback!
+
+## Acknowledgments
+
+This application was developed as part of the [Udemy course](https://www.udemy.com/course/the-ultimate-react-course) by Jonas Schmedtmann. I extend my sincere gratitude to Jonas for his outstanding teaching and continuous guidance during the course.
