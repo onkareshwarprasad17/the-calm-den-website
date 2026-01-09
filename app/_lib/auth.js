@@ -17,12 +17,12 @@ const authConfig = {
     // runs before the actual signIn process happens but after the user has put their credentials
     async signIn({ user, account, profile }) {
       try {
-        const existingGuest = await getGuest(user.email);
+        const existingGuest = await getGuest(user?.email);
 
         if (!existingGuest)
           await createGuest({
-            email: user.email,
-            fullName: user.name,
+            email: user?.email,
+            fullName: user?.name,
           });
         return true;
       } catch (error) {
@@ -31,7 +31,7 @@ const authConfig = {
     },
     // runs each time the session is checked out, for ex. when we call the auth function
     async session({ session, user }) {
-      const guest = await getGuest(session.user.email);
+      const guest = await getGuest(session?.user?.email);
       session.user.guestId = guest.id;
       return session; // not returning session here will skip generating session when auth is called
     },
